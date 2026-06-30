@@ -10,7 +10,11 @@ axios.defaults.baseURL = `${import.meta.env.VITE_APP_API_URL}/api`
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 // add encryption to all requests
-axios.defaults.encrypt = import.meta.env.VITE_APP_ENCRYPT
+
+axios.defaults.encrypt =
+  import.meta.env.VITE_APP_ENCRYPT === 'true' ||
+  import.meta.env.VITE_APP_ENCRYPT === true;
+
 
 // Variables to track token refresh state
 let isRefreshing = false
@@ -79,17 +83,25 @@ const encryptRequestData = (data, contentType) => {
   return cryptor.encrypt_text(dataString)
 }
 
+
+
 // 🔐 Request Interceptor: Auto-encrypt + handle response type
 axios.interceptors.request.use(
   async (config) => {
     const methodsToEncrypt = ['post', 'put', 'patch', 'POST', 'PUT', 'PATCH']
+
     // Auth token
     if (window.app.$storage.has('auth.token')) {
       config.headers.Authorization = await window.app.$storage.getSafe('auth.token')
     }
     config.headers.lang = window.app.$r.lang
-    // 🔐 Auto-encrypt request body if flag is set
-    if (config.encrypt && methodsToEncrypt.includes(config.method) && config.data) {
+
+    // ✅ شرط درست و امن برای رمزنگاری
+    const shouldEncrypt = config.encrypt === true &&
+      methodsToEncrypt.includes(config.method) &&
+      config.data
+
+    if (shouldEncrypt) {
       const originalContentType =
         config.headers['Content-Type'] || config.headers['content-type'] || 'application/json'
 
@@ -100,16 +112,16 @@ axios.interceptors.request.use(
         // Set headers to inform server
         config.headers['encrypted'] = '1'
         config.headers['real-type'] = originalContentType
-        config.headers['Content-Type'] = 'text/plain' // Encrypted data is base64 text
+        config.headers['Content-Type'] = 'text/plain'
 
-        // Also set responseType for encrypted responses
         config.responseType = 'arraybuffer'
         config.transformResponse = [(data) => data]
 
         return config
       })
-    } else if (config.responseType === 'arraybuffer' || config.encrypt) {
-      // 🔓 Handle non-encrypted but binary responses
+    }
+    // اگر encrypt فعال نبود یا درخواست GET بود
+    else if (config.responseType === 'arraybuffer' || config.encrypt) {
       config.responseType = 'arraybuffer'
       config.transformResponse = [(data) => data]
     }
@@ -330,3 +342,5 @@ export default {
     app.provide('axios', app.config.globalProperties.$axios)
   },
 }
+// add encryption to all requests
+// ✅ Fixed: Vite returns env values as string, so we need explicit check
