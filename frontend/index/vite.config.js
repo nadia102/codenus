@@ -85,8 +85,11 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler'
+        api: 'modern-compiler',
+        silenceDeprecations: ['legacy-js-api', 'import', 'if-function'],
+        quietDeps: true
       }
     }
   }
 })
+Fix Sass deprecation warnings in admin frontend
