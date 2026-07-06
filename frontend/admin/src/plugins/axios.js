@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Crypto } from '@/plugins/ecc.js'
 
-const serverPublicKey = import.meta.env.VITE_APP_SERVER_PUBKEY
+const serverPublicKey = import.meta.env.VITE_APP_SERVER_PUBKEY==="true"
 
 const cryptor = new Crypto()
 
@@ -290,6 +290,9 @@ axios.update_key = () => {
   return cryptor
     .init(serverPublicKey)
     .then((clientPublicKey) => {
+      if (!window.app.$storage.has('auth.token')) {
+        return "ok"
+      }
       return axios
         .post(
           '/user/renew-token',

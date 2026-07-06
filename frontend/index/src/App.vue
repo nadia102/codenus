@@ -25,7 +25,7 @@ export default {
     }
   },
   created() {
-    if (import.meta.env.VITE_APP_ENCRYPT) {
+    if (import.meta.env.VITE_APP_ENCRYPT==="true") {
       this.$r.store.user = { login: false, info: {} }
       this.$r.store.user_loaded = false
       this.$axios.update_key().finally(() => {
