@@ -12,7 +12,12 @@ export default defineConfig({
     outDir: '../../public/index',
     sourcemap: false,
     minify: 'terser',
-    cssMinify: 'lightningcss'
+    cssMinify: 'lightningcss',
+    terserOptions: {
+      format: {
+        comments: false
+      },
+    },
   },
   server: {
     proxy: {
@@ -23,7 +28,13 @@ export default defineConfig({
   },
   plugins: [
     renusifyAutoImport(),
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          comments: false
+        },
+      },
+    }),
     vueDevTools(),
     VitePWA({
       registerType: 'prompt',

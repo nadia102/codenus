@@ -11,7 +11,12 @@ export default defineConfig({
     outDir: '../../public/admin',
     sourcemap: false,
     minify: 'terser',
-    cssMinify: 'lightningcss'
+    cssMinify: 'lightningcss',
+    terserOptions: {
+      format: {
+        comments: false
+      },
+    },
   },
   server: {
    proxy:{
@@ -22,7 +27,13 @@ export default defineConfig({
   },
   plugins: [
     renusifyAutoImport(),
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          comments: false
+        },
+      },
+    }),
     vueDevTools()
   ],
   resolve: {

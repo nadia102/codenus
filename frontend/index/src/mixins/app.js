@@ -51,11 +51,10 @@ export const App = {
       setTimeout(() => {
         this.lang_added = true
       }, 10)
-      this.$helper.setCookie('lang', this.$r.lang, 1000 * 24 * 60 * 60)
       document.documentElement.setAttribute('lang', this.$r.lang)
     },
     getDefault() {
-      this.$axios.get('site-default/' + this.$r.package).then(({data}) => {
+      this.$axios.get('site-default/' + this.$r.package+"/"+this.$r.lang).then(({data}) => {
         let d = this.$storage.get('siteDefault', {})
         if (data['hash'] !== d['hash']) {
           this.$storage.set('siteDefault', data)

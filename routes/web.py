@@ -34,16 +34,15 @@ def public_index(name: str,request:Request):
     else:
         return index(request)
 
-def default(request,package):
+def default(request,package,lang):
     site_default = Setting(request).hub.get('site_default', None)
     site_color = Setting(request).hub.get('site_color', None)
     if site_default is None:
         return JsonResponse({}, Status.HTTP_404_NOT_FOUND)
-    if request.cookies:
-        lang = request.cookies.get('lang', site_default['lang'])
-    else:
-        lang = site_default['lang']
+    
     langs = Setting(request).hub.get('translates',{}).get('langs', {})
+    if lang not in langs:
+        return JsonResponse({}, Status.HTTP_404_NOT_FOUND)
     rtl = site_default['rtl']
 
     meta_tag = Setting(request).hub.get('meta_tag', '')
@@ -113,5 +112,5 @@ def opt(path, request):
 r = Router()
 r.option(r'{path:[\w\W]*}', func=opt)
 r.get('/', func=index)
-r.get('api/site-default/{package}', func=default)
+r.get('api/site-default/{package}/{lang}', func=default)
 r.get(r'/{name:[\s\S]*}', func=public_index)
