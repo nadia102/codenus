@@ -149,7 +149,7 @@ watch(
 
 <style lang="scss">
 @use '../styles/mixins/glass' as glass;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('../styles/font/inter-regular.woff2');
 
 .admin-menus {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

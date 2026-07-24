@@ -186,7 +186,7 @@ watch(
 @use "renusify/style/mixins" as mx;
 @use "renusify/style/mixins/container" as mxc;
 @use '../styles/mixins/glass' as glass;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('../styles/font/inter-regular.woff2');
 
 $menu-width: 320px;
 $header-height: 80px;
@@ -201,7 +201,7 @@ $bottom-menu-height: 52px;
   position: relative;
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 50%, #e8edf4 100%);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', sans-serif;
 
   // ============================================
   // HEADER - Keep original styles + enhancements
