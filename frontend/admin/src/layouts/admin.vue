@@ -186,7 +186,7 @@ watch(
 @use "renusify/style/mixins" as mx;
 @use "renusify/style/mixins/container" as mxc;
 @use '../styles/mixins/glass' as glass;
-@import url('../styles/font/inter-regular.woff2');
+@import url('../styles/fonts/inter-regular.woff2');
 
 $menu-width: 320px;
 $header-height: 80px;
